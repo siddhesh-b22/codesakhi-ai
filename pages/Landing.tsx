@@ -228,7 +228,8 @@ const Landing: React.FC = () => {
                          <div className="flex items-center justify-between gap-6">
                             <div className="sticker-card bg-indigo-500/10 border-indigo-500/30 p-4 text-center flex-1 reveal stagger-1">
                                <p className="text-[9px] font-black uppercase text-indigo-300 mb-2">Boring Syntax</p>
-                               <code className="text-[10px] font-mono text-slate-400 italic">while(i < n)...</code>
+                               {/* Fixed: Escaped the less-than sign to avoid JSX property parsing error */}
+                               <code className="text-[10px] font-mono text-slate-400 italic">while(i &lt; n)...</code>
                             </div>
                             <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center shrink-0 border border-white/10 z-10 shadow-lg">
                                <i className="fa-solid fa-plus text-[10px] text-indigo-400"></i>
