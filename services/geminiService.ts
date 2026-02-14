@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Difficulty } from "../types";
 
@@ -13,7 +12,10 @@ IMPORTANT: Never use the word 'beta' or 'child'. Use 'friend', 'buddy', 'yaar', 
 };
 
 export const geminiService = {
-  // Use process.env.API_KEY exclusively and named parameter for initialization
+  /**
+   * Always initializes the GoogleGenAI instance using the process.env.API_KEY.
+   * This is shimmed in index.tsx from Vite's import.meta.env.VITE_GEMINI_API_KEY.
+   */
   getAIClient() {
     return new GoogleGenAI({ apiKey: process.env.API_KEY });
   },
@@ -70,7 +72,6 @@ export const geminiService = {
           }
         }
       });
-      // Accessing .text property directly as per guidelines
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini analyzeSubmission failed:", error);
@@ -106,7 +107,6 @@ export const geminiService = {
           }
         }
       });
-      // Accessing .text property directly
       return JSON.parse(response.text || "[]");
     } catch (error) {
       console.error("Gemini explainCode failed:", error);
@@ -122,7 +122,6 @@ export const geminiService = {
         model: "gemini-3-pro-preview",
         contents: prompt
       });
-      // Accessing .text property directly
       return response.text || "I'm sorry buddy, I couldn't generate an answer right now. Try again, yaar.";
     } catch (error) {
       console.error("Gemini tutorConcept failed:", error);
@@ -155,7 +154,6 @@ export const geminiService = {
           }
         }
       });
-      // Accessing .text property directly
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini debugCode failed:", error);
@@ -197,7 +195,6 @@ export const geminiService = {
           }
         }
       });
-      // Accessing .text property directly
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini summarizeNotes failed:", error);
@@ -233,7 +230,6 @@ export const geminiService = {
           }
         }
       });
-      // Accessing .text property directly
       return JSON.parse(response.text || "[]");
     } catch (error) {
       console.error("Gemini generateQuiz failed:", error);
@@ -248,7 +244,6 @@ export const geminiService = {
         model: "gemini-3-pro-preview",
         contents: `${getPersona(userName)} Write a clear, pedagogical editorial for "${problemTitle}". Include a high-level strategy and a logic implementation in Python.`
       });
-      // Accessing .text property directly
       return response.text || "Editorial generation skipped a beat. Try again, buddy!";
     } catch (error) {
       console.error("Gemini getEditorial failed:", error);
