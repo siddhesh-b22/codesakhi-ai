@@ -2,12 +2,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Difficulty } from "../types";
 
-/**
- * Note on initialization:
- * As per library requirements, we access the key via process.env.API_KEY.
- * This is shimmed in index.tsx using Vite's environment system.
- */
-
 const getPersona = (userName: string) => {
   const name = userName.split(' ')[0];
   return `You are CodeSakhi, a brilliant senior engineer and a supportive big-sister/friend to the student. 
@@ -19,18 +13,11 @@ IMPORTANT: Never use the word 'beta' or 'child'. Use 'friend', 'buddy', 'yaar', 
 };
 
 export const geminiService = {
-  /**
-   * Safe initialization helper to prevent crashes if key is missing.
-   */
+  // Use process.env.API_KEY exclusively and named parameter for initialization
   getAIClient() {
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-      throw new Error("GEMINI_API_KEY_MISSING");
-    }
-    return new GoogleGenAI({ apiKey });
+    return new GoogleGenAI({ apiKey: process.env.API_KEY });
   },
 
-  // Analyzes code submissions for interviews with structured feedback
   async analyzeSubmission(code: string, language: string, problemTitle: string, company: string, userName: string) {
     try {
       const ai = this.getAIClient();
@@ -83,6 +70,7 @@ export const geminiService = {
           }
         }
       });
+      // Accessing .text property directly as per guidelines
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini analyzeSubmission failed:", error);
@@ -90,7 +78,6 @@ export const geminiService = {
     }
   },
 
-  // Line-by-line explanation of code using Gemini API
   async explainCode(code: string, difficulty: Difficulty, userName: string) {
     try {
       const ai = this.getAIClient();
@@ -119,6 +106,7 @@ export const geminiService = {
           }
         }
       });
+      // Accessing .text property directly
       return JSON.parse(response.text || "[]");
     } catch (error) {
       console.error("Gemini explainCode failed:", error);
@@ -126,7 +114,6 @@ export const geminiService = {
     }
   },
 
-  // Direct conceptual tutoring through the Gemini Chat interface
   async tutorConcept(query: string, difficulty: Difficulty, userName: string) {
     try {
       const ai = this.getAIClient();
@@ -135,6 +122,7 @@ export const geminiService = {
         model: "gemini-3-pro-preview",
         contents: prompt
       });
+      // Accessing .text property directly
       return response.text || "I'm sorry buddy, I couldn't generate an answer right now. Try again, yaar.";
     } catch (error) {
       console.error("Gemini tutorConcept failed:", error);
@@ -142,7 +130,6 @@ export const geminiService = {
     }
   },
 
-  // Advanced debugging with identified fixes and learning tips
   async debugCode(code: string, errorMsg: string, userName: string) {
     try {
       const ai = this.getAIClient();
@@ -168,6 +155,7 @@ export const geminiService = {
           }
         }
       });
+      // Accessing .text property directly
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini debugCode failed:", error);
@@ -175,7 +163,6 @@ export const geminiService = {
     }
   },
 
-  // Note synthesis for student productivity using Flash model
   async summarizeNotes(notes: string, userName: string) {
     try {
       const ai = this.getAIClient();
@@ -210,6 +197,7 @@ export const geminiService = {
           }
         }
       });
+      // Accessing .text property directly
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini summarizeNotes failed:", error);
@@ -217,7 +205,6 @@ export const geminiService = {
     }
   },
 
-  // Adaptive quiz generation focusing on weak logical nodes
   async generateQuiz(topic: string, difficulty: Difficulty, userName: string, weakTopics?: string[]) {
     try {
       const ai = this.getAIClient();
@@ -246,6 +233,7 @@ export const geminiService = {
           }
         }
       });
+      // Accessing .text property directly
       return JSON.parse(response.text || "[]");
     } catch (error) {
       console.error("Gemini generateQuiz failed:", error);
@@ -253,7 +241,6 @@ export const geminiService = {
     }
   },
 
-  // Generates in-depth problem editorials
   async getEditorial(problemTitle: string, userName: string) {
     try {
       const ai = this.getAIClient();
@@ -261,6 +248,7 @@ export const geminiService = {
         model: "gemini-3-pro-preview",
         contents: `${getPersona(userName)} Write a clear, pedagogical editorial for "${problemTitle}". Include a high-level strategy and a logic implementation in Python.`
       });
+      // Accessing .text property directly
       return response.text || "Editorial generation skipped a beat. Try again, buddy!";
     } catch (error) {
       console.error("Gemini getEditorial failed:", error);

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -21,7 +20,7 @@ const SimulationViewer: React.FC<{ type?: string, progress: number }> = ({ type,
                   <span className="text-[9px] font-black uppercase text-indigo-300 mb-1">Data</span>
                   <span className="text-xl font-black">{String.fromCharCode(64 + i)}</span>
                   <div className="w-full h-[2px] bg-white/10 my-1"></div>
-                  <span className="text-[8px] font-black text-slate-500 uppercase">Next -></span>
+                  <span className="text-[8px] font-black text-slate-500 uppercase">Next -&gt;</span>
                </div>
                {i < 5 && (
                   <div className={`w-12 h-1 bg-gradient-to-r from-indigo-500 to-slate-700 transition-opacity duration-500 ${i <= progress ? 'opacity-100' : 'opacity-10'}`}></div>
