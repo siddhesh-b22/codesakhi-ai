@@ -1,68 +1,37 @@
-# CodeSakhi AI – Software Requirements Specification (SRS)
+# CodeSakhi AI – Software Requirements Specification
 
-## 1. Project Overview
-CodeSakhi AI is an AI-powered education and development companion specifically designed for Indian engineering students. It leverages the Google Gemini API to transform complex technical concepts into relatable, story-driven analogies (e.g., "Tiffin Boxes" for memory nodes) and provides high-fidelity code analysis for interview preparation.
+## 1. Problem Statement
+Traditional engineering education in India often presents Data Structures and Algorithms (DSA) in a dry, academic manner. Students frequently resort to rote memorization rather than developing a deep, intuitive understanding of logic. Furthermore, there is a significant "readiness gap" between solving a problem on a platform and being able to explain that logic clearly during high-stakes technical interviews at companies like Google, Amazon, or Zomato.
 
-## 2. Problem Statement
-Traditional coding platforms often present data structures and algorithms (DSA) in a dry, academic manner, leading to rote memorization. Students frequently struggle to bridge the gap between "solving a problem" and "understanding the logic" required for high-stakes interviews at companies like Google, Amazon, or Zomato.
+## 2. Objectives
+*   **Intuitive Learning:** Transform abstract code into relatable Indian analogies (e.g., "Tiffin Boxes" for memory nodes).
+*   **Actionable Feedback:** Provide high-fidelity analysis of code submissions, including time/space complexity and company-specific readiness scores.
+*   **Unified Workspace:** Offer a single platform for learning (Courses), practicing (Compiler), and refining (AI Tutoring).
+*   **Gated Progression:** Ensure mastery through threshold-based progression, where subsequent modules unlock only after a 60% mastery score.
 
-## 3. Objectives
-- **Demystify DSA:** Use "Synaptic Storytelling" to make logic intuitive.
-- **Provide Industry-Grade Feedback:** Analyze code for complexity and quality based on specific company hiring bars.
-- **Personalized Learning:** Track "XP" and mastery levels across different modules.
-- **All-in-One Workspace:** Integrate a compiler, tutor, debugger, and notes synthesizer.
+## 3. Functional Requirements
+*   **User Dashboard:** Display real-time learning metrics, XP, current streaks, and recommended "Logic Nodes."
+*   **Gated Course System:** A curriculum divided into modules (e.g., Arrays, Trees) with required assessments for advancement.
+*   **Interactive Compiler:** Support for multi-language execution (JS, Python, C++, Java) with test case verification.
+*   **AI Submission Analysis:** Deep analysis of user code using the Gemini API to evaluate readability, efficiency, and correctness.
+*   **Notes Alchemist:** A utility to transmute raw lecture notes into structured summaries and active-recall flashcards.
+*   **Bug Shield:** An AI-driven debugging assistant that identifies logical traps and suggests remediated code.
+*   **Adaptive Quiz Generator:** Real-time generation of assessments based on the user's current difficulty level and weak concepts.
 
-## 4. Target Users
-- Undergraduate engineering students in India.
-- Job seekers preparing for FAANG, Product-based, and Service-based company interviews.
-- Self-taught developers looking for a supportive, peer-like mentor.
+## 4. Non-Functional Requirements
+*   **Performance:** Initial page load under 2 seconds; UI transitions maintained at 60fps for a fluid "Sticker-Card" experience.
+*   **Scalability:** A modular architecture capable of supporting horizontal expansion of course content and company-specific tracks.
+*   **Availability:** High availability achieved through Vercel's global CDN and robust error handling for external API dependencies.
+*   **Security:** Secure handling of the Gemini API key via environment variables and sanitization of user inputs.
+*   **Responsiveness:** Seamless functionality across mobile, tablet, and desktop viewports.
 
-## 5. Functional Requirements
-### 5.1 User Profile & Stats
-- Maintain a persistent user state including XP, daily streaks, and mastery scores for DSA modules.
-- Adaptive learning: Use previous performance to generate targeted quiz questions.
+## 5. Constraints
+*   **API Dependency:** The application’s intelligence layer is dependent on the availability and rate limits of the Google Gemini API.
+*   **Client-Side Execution:** Code execution is simulated on the client side; large-scale computational tasks are limited by browser resources.
+*   **Environment Restrictions:** Requires the injection of `process.env.API_KEY` for full functionality.
 
-### 5.2 Interactive Compiler
-- Support for multiple languages (JavaScript, Python, C++, Java).
-- Real-time code execution and test case verification.
-- "Submit" functionality to trigger deep AI analysis.
-
-### 5.3 AI-Powered Analysis (Gemini Integration)
-- **Logic Decoder:** Line-by-line explanation of code using analogies.
-- **Bug Shield:** Logical vulnerability scanning and fix suggestions.
-- **Complexity Analysis:** Evaluation of Time/Space complexity with optimal pattern suggestions.
-- **Company Readiness:** Scoring of code based on specific company hiring standards.
-
-### 5.4 Notes Alchemist
-- Text-to-Summary transmutation: Converting raw lecture notes into bullet points, flashcards, and core summaries.
-
-### 5.5 Course & Company Roadmap
-- Gated progression: Modules unlock only after passing a 60% mastery threshold.
-- Company-specific practice tracks (Google, Amazon, TCS, etc.).
-
-## 6. Non-Functional Requirements
-- **Performance:** UI transitions should be fluid (60fps); initial page load under 2 seconds.
-- **Reliability:** Graceful handling of Gemini API rate limits or downtime.
-- **Accessibility:** High-contrast text, clear typography (Plus Jakarta Sans), and ARIA-compliant navigation.
-- **Scalability:** SPA architecture capable of handling growing course content without performance degradation.
-- **Browser Compatibility:** Support for Chrome, Firefox, Safari, and Edge (Vite-standard ESM support).
-
-## 7. Technical Requirements
-- **Runtime:** Node.js 18+ (Development).
-- **Framework:** React 19 (TypeScript).
-- **Build Tool:** Vite (Production-optimized).
-- **Environment:** API Keys handled via `import.meta.env.VITE_GEMINI_API_KEY`.
-- **Deployment:** Vercel (Edge-optimized hosting).
-
-## 8. Constraints
-- API calls depend on external Google Gemini infrastructure.
-- Client-side execution limits the size of files that can be processed in "Notes Alchemist."
-
-## 9. Assumptions
-- Users have a stable internet connection for API interactions.
-- The `VITE_GEMINI_API_KEY` is securely injected by the deployment environment (Vercel).
-
-## 10. Future Enhancements
-- Voice-enabled tutoring using Gemini Real-time API.
-- Collaborative "Chai Break" rooms for peer-to-peer debugging.
-- Mobile application (React Native) with offline-sync for notes.
+## 6. Future Scope
+*   **Voice-Enabled Tutoring:** Integration with Gemini's real-time audio modality for natural language conversations.
+*   **Backend Integration:** Migration to a serverless backend architecture to enhance API key security and enable persistent cloud storage.
+*   **Collaborative Logic:** "Chai Break" rooms for peer-to-peer debugging and real-time collaborative coding.
+*   **Mobile App:** Development of a React Native application for offline access to the "Notes Alchemist" deck.
