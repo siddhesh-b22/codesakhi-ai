@@ -13,15 +13,25 @@ IMPORTANT: Never use the word 'beta' or 'child'. Use 'friend', 'buddy', 'yaar', 
 };
 
 /**
- * Initialize the GoogleGenAI client using process.env.API_KEY as per the guidelines.
- * The environment variable is assumed to be pre-configured and accessible.
+ * Lazily initializes and returns a GoogleGenAI client instance.
+ * Uses process.env.API_KEY as per the @google/genai coding guidelines.
  */
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getAI = () => {
+  // Use process.env.API_KEY directly as per the coding guidelines.
+  const apiKey = process.env.API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Gemini API key missing. Please ensure process.env.API_KEY is configured.");
+  }
+
+  // Always use a named parameter for the API key.
+  return new GoogleGenAI({ apiKey });
+};
 
 export const geminiService = {
   async analyzeSubmission(code: string, language: string, problemTitle: string, company: string, userName: string) {
     try {
-      // Prompt construction with persona context
+      const ai = getAI();
       const prompt = `${getPersona(userName)}
         Analyze this ${language} code for the problem "${problemTitle}". 
         Context: This is being evaluated for an interview at ${company || 'a top tech firm'}.
@@ -36,7 +46,7 @@ export const geminiService = {
         Code:
         ${code}`;
 
-      // Call generateContent with model name and content directly
+      // Use ai.models.generateContent to query GenAI with both the model name and prompt.
       const response = await ai.models.generateContent({
         model: "gemini-3-pro-preview",
         contents: prompt,
@@ -72,7 +82,7 @@ export const geminiService = {
           }
         }
       });
-      // Access text as a property
+      // Use the .text property (not a method) to get the generated text.
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini analyzeSubmission failed:", error);
@@ -82,6 +92,7 @@ export const geminiService = {
 
   async explainCode(code: string, difficulty: Difficulty, userName: string) {
     try {
+      const ai = getAI();
       const prompt = `${getPersona(userName)} Explain this code line-by-line for a ${difficulty} level student. Breakdown complex logic into simple stories.
       
       Code:
@@ -116,6 +127,7 @@ export const geminiService = {
 
   async tutorConcept(query: string, difficulty: Difficulty, userName: string) {
     try {
+      const ai = getAI();
       const prompt = `${getPersona(userName)} Explain the concept of "${query}" for a ${difficulty} level student using relatable Indian analogies.`;
       const response = await ai.models.generateContent({
         model: "gemini-3-pro-preview",
@@ -130,6 +142,7 @@ export const geminiService = {
 
   async debugCode(code: string, errorMsg: string, userName: string) {
     try {
+      const ai = getAI();
       const prompt = `${getPersona(userName)} Identify the logical bugs in this code and provide a fix. Terminal noise: ${errorMsg || 'None'}.
       
       Code:
@@ -161,6 +174,7 @@ export const geminiService = {
 
   async summarizeNotes(notes: string, userName: string) {
     try {
+      const ai = getAI();
       const prompt = `${getPersona(userName)} Transmute these lecture notes into structured study nuggets, flashcards, and a core summary.
       
       Notes:
@@ -201,6 +215,7 @@ export const geminiService = {
 
   async generateQuiz(topic: string, difficulty: Difficulty, userName: string, weakTopics?: string[]) {
     try {
+      const ai = getAI();
       const prompt = `${getPersona(userName)} Generate a 5-question adaptive multiple choice quiz on "${topic}". 
       Complexity Level: ${difficulty}.
       ${weakTopics && weakTopics.length > 0 ? `Targeted logic nodes to verify: ${weakTopics.join(', ')}` : ''}`;
@@ -235,6 +250,7 @@ export const geminiService = {
 
   async getEditorial(problemTitle: string, userName: string) {
     try {
+      const ai = getAI();
       const response = await ai.models.generateContent({
         model: "gemini-3-pro-preview",
         contents: `${getPersona(userName)} Write a clear, pedagogical editorial for "${problemTitle}". Include a high-level strategy and a logic implementation in Python.`
