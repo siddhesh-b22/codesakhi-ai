@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Difficulty } from "../types";
 
@@ -6,10 +5,12 @@ const getPersona = (userName: string) => {
   const name = userName.split(' ')[0];
   return `You are CodeSakhi, a brilliant senior engineer and a supportive big-sister/friend to the student. 
 Tone: Friendly, encouraging, informal, and relatable. 
-Style: Use fun Indian analogies (like chai stalls, traffic jams, tiffin boxes).
+Style: Use fun Indian analogies (like chai stalls, traffic jams, tiffin boxes) as defined in your KIRO blueprint.json.
 Goal: Provide high-quality technical feedback while keeping the student motivated. 
 Constraint: Be a supportive peer, not a parental figure. Address the user as ${name}. 
-IMPORTANT: Never use the word 'beta' or 'child'. Use 'friend', 'buddy', 'yaar', or 'partner' instead.`;
+System Config: Follow the response shaping rules in KIRO config.json (e.g., avoid academic jargon).
+IMPORTANT: Never use the word 'beta' or 'child'. Use 'friend', 'buddy', 'yaar', or 'partner' instead.
+Grounding: Reference core analogies like 'Matryoshka Dolls' for Recursion and 'Tiffin Boxes' for Memory Nodes for consistency.`;
 };
 
 /**
@@ -17,14 +18,12 @@ IMPORTANT: Never use the word 'beta' or 'child'. Use 'friend', 'buddy', 'yaar', 
  * Uses process.env.API_KEY as per the @google/genai coding guidelines.
  */
 const getAI = () => {
-  // Use process.env.API_KEY directly as per the coding guidelines.
   const apiKey = process.env.API_KEY;
 
   if (!apiKey) {
     throw new Error("Gemini API key missing. Please ensure process.env.API_KEY is configured.");
   }
 
-  // Always use a named parameter for the API key.
   return new GoogleGenAI({ apiKey });
 };
 
@@ -46,7 +45,6 @@ export const geminiService = {
         Code:
         ${code}`;
 
-      // Use ai.models.generateContent to query GenAI with both the model name and prompt.
       const response = await ai.models.generateContent({
         model: "gemini-3-pro-preview",
         contents: prompt,
@@ -82,7 +80,6 @@ export const geminiService = {
           }
         }
       });
-      // Use the .text property (not a method) to get the generated text.
       return JSON.parse(response.text || "{}");
     } catch (error) {
       console.error("Gemini analyzeSubmission failed:", error);
@@ -93,7 +90,7 @@ export const geminiService = {
   async explainCode(code: string, difficulty: Difficulty, userName: string) {
     try {
       const ai = getAI();
-      const prompt = `${getPersona(userName)} Explain this code line-by-line for a ${difficulty} level student. Breakdown complex logic into simple stories.
+      const prompt = `${getPersona(userName)} Explain this code line-by-line for a ${difficulty} level student. Breakdown complex logic into simple stories using your KIRO blueprint.json dictionary.
       
       Code:
       ${code}`;
@@ -128,7 +125,7 @@ export const geminiService = {
   async tutorConcept(query: string, difficulty: Difficulty, userName: string) {
     try {
       const ai = getAI();
-      const prompt = `${getPersona(userName)} Explain the concept of "${query}" for a ${difficulty} level student using relatable Indian analogies.`;
+      const prompt = `${getPersona(userName)} Explain the concept of "${query}" for a ${difficulty} level student using relatable Indian analogies from your KIRO blueprint.json.`;
       const response = await ai.models.generateContent({
         model: "gemini-3-pro-preview",
         contents: prompt
@@ -175,7 +172,7 @@ export const geminiService = {
   async summarizeNotes(notes: string, userName: string) {
     try {
       const ai = getAI();
-      const prompt = `${getPersona(userName)} Transmute these lecture notes into structured study nuggets, flashcards, and a core summary.
+      const prompt = `${getPersona(userName)} Transmute these lecture notes into structured study nuggets, flashcards, and a core summary as per KIRO config guidelines.
       
       Notes:
       ${notes}`;

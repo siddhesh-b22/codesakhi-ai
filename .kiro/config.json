@@ -1,0 +1,22 @@
+{
+  "kiro_version": "1.2.0",
+  "grounding_mode": "STRICT",
+  "persona_injection": true,
+  "analogy_persistence": "HIGH",
+  "response_shaping": {
+    "max_analogy_depth": 2,
+    "include_encouragement": true,
+    "avoid_academic_jargon": true,
+    "use_indian_context": true
+  },
+  "mastery_thresholds": {
+    "beginner": 60,
+    "intermediate": 75,
+    "advanced": 85
+  },
+  "model_mapping": {
+    "reasoning": "gemini-3-pro-preview",
+    "summarization": "gemini-3-flash-preview",
+    "speed": "gemini-3-flash-preview"
+  }
+}

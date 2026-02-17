@@ -6,39 +6,38 @@ CodeSakhi AI follows a **Modular Service-Oriented SPA Architecture**.
 *   **Intelligence Layer:** Direct integration with the **Google Gemini API** via the `@google/genai` SDK.
 *   **Logic Layer:** Decoupled services (`geminiService`, `problemService`) that handle data orchestration and prompt engineering.
 *   **State Layer:** React Context API (`UserContext`) providing a single source of truth for stats, preferences, and persistence via `localStorage`.
+*   **Knowledge Layer (KIRO):** The `.kiro/` directory acting as a Knowledge & Identity Repository Object for consistent persona grounding.
 
 ## 2. System Flow
 1.  **Entry:** User interacts with the Dashboard or a specific Course Module.
 2.  **Request:** A UI action (e.g., clicking "Submit" in the Compiler) triggers a service method.
-3.  **Processing:** The service constructs a "Persona-Driven" prompt (CodeSakhi as the Senior Engineer) and sends it to Gemini.
-4.  **Response:** Gemini returns structured data (JSON) which the service parses and validates.
-5.  **State Update:** The `UserContext` updates global XP and stats based on the response quality.
-6.  **Display:** The UI re-renders to show the "Sakhi Analysis" or "Logic Decoder" results.
+3.  **Processing:** The service constructs a persona-driven prompt. It references the `.kiro/blueprint.json` core analogies and `.kiro/config.json` rules to ensure a consistent mentoring style.
+4.  **Response:** Gemini returns structured data (JSON) which the service parses.
+5.  **State Update:** The `UserContext` updates global XP and stats.
+6.  **Display:** The UI re-renders to show the "Sakhi Analysis" results.
 
 ## 3. Gemini Integration
-*   **SDK Usage:** Employs the `@google/genai` library with the `gemini-3-pro-preview` model for complex reasoning and `gemini-3-flash-preview` for summarization.
+*   **SDK Usage:** Employs the `@google/genai` library with the `gemini-3-pro-preview` model for complex reasoning.
 *   **Initialization:** The client is initialized globally using the environment-injected key:
     ```typescript
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     ```
-*   **Prompt Engineering:** Prompts are wrapped in a system instruction that defines the "CodeSakhi" persona—a supportive, Indian senior engineer using analogies like "Tiffin Boxes."
-*   **Structured Output:** Utilizes `responseMimeType: "application/json"` and `responseSchema` to ensure the AI returns data compatible with our TypeScript interfaces.
+*   **Prompt Engineering:** System instructions are grounded in the KIRO blueprint, defining "CodeSakhi" as a supportive Indian senior engineer.
 
 ## 4. Environment Variable Strategy
-*   **Development:** Variables are managed through local `.env` files (ignored by Git).
-*   **Production:** The `API_KEY` is injected as a secure secret in the Vercel Project Settings.
-*   **Access Pattern:** The application accesses the key exclusively via `process.env.API_KEY`, ensuring a consistent interface between the build environment and the runtime.
+*   **Development:** Variables managed through local `.env` files.
+*   **Production:** The `API_KEY` is injected as a secure secret in Vercel.
+*   **Access Pattern:** Accessed via `process.env.API_KEY`.
 
 ## 5. Deployment Strategy
 *   **Platform:** Vercel.
-*   **Build Pipeline:** GitHub push triggers an automated build using the Vite compiler, performing tree-shaking and minification.
-*   **Routing:** A `vercel.json` rewrite rule is implemented to redirect all traffic to `index.html`, allowing React Router to handle SPA navigation without server-side 404s.
-*   **Edge Optimization:** Assets are served via Vercel’s global Edge Network for low-latency delivery across India.
+*   **Build Pipeline:** GitHub push triggers automated build using Vite.
+*   **Routing:** `vercel.json` rewrites support React Router navigation.
 
-## 6. Data Flow
-1.  **User Input:** User pastes code or notes into a functional module.
-2.  **Validation:** Frontend checks for empty inputs or illegal characters.
-3.  **API Call:** `geminiService` sends the data to Google’s servers.
-4.  **Parsing:** The raw string response is extracted using `response.text` and parsed into a JSON object.
-5.  **Context Sync:** Stats (XP, Errors Fixed) are updated in the user’s local profile.
-6.  **UI Feedback:** Components use the updated data to render explanations, complexities, or flashcards.
+## 6. KIRO (Knowledge & Identity Repository Object)
+The `.kiro/` directory is a localized repository used to ground the AI's personality:
+*   `blueprint.json`: Defines the persona, linguistic markers, and the master dictionary of technical-to-cultural analogies.
+*   `config.json`: Contains systemic rules for response shaping, mastery thresholds, and model mappings.
+
+## 7. Data Flow
+1.  **User Input** -> 2. **Validation** -> 3. **API Call** -> 4. **Parsing** -> 5. **Context Sync** -> 6. **UI Feedback**.
